@@ -1,15 +1,15 @@
-package com.dynamic.taskManagement;
+package com.dynamic.taskManagement.task;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.dynamic.taskManagement.exceptions.dtos.TaskCreateDTO;
+import com.dynamic.taskManagement.exceptions.customeException.NotFoundException;
+import com.dynamic.taskManagement.task.dtos.TaskCreateDTO;
 
 import jakarta.validation.Valid;
 
@@ -19,28 +19,28 @@ public class TaskService {
     private TaskRepository taskRepository;
 
     public TaskEntity createTask(@Valid TaskCreateDTO payload) {
-        TaskEntity task = new TaskEntity();
-        task.setTitle(payload.getTitle());
-        task.setStatus(payload.getStatus());
-        task.setDescription(payload.getDescription());
+        TaskEntity task = new TaskEntity(payload);
         return taskRepository.save(task);
     }
 
     public List<TaskEntity> listTasks(@RequestParam Optional<String> status) {
-        List<TaskEntity> tasks;
         if (status.isPresent()) {
-            tasks = taskRepository.findByStatus(status.get());
-        } else {
-            tasks = taskRepository.findAll();
+            return taskRepository.findByStatus(status.get());
         }
-        return tasks.isEmpty() ? Collections.emptyList() : tasks;
+        return taskRepository.findAll();
     }
 
     public Optional<TaskEntity> getTaskById(UUID id) {
+        if (!taskRepository.findById(id).isPresent()) {
+            throw new NotFoundException("Task Not Found");
+        }
         return taskRepository.findById(id);
     }
 
     public void deleteTask(UUID id) {
+        if (!taskRepository.findById(id).isPresent()) {
+            throw new NotFoundException("Task Not Found");
+        }
         taskRepository.deleteById(id);
     }
 

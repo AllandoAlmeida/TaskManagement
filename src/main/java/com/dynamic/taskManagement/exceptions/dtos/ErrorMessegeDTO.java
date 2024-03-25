@@ -5,11 +5,9 @@ import lombok.Data;
 @Data
 public class ErrorMessegeDTO {
     private String message;
-    private String field;
 
    
-    public ErrorMessegeDTO(String message, String field) {
+    public ErrorMessegeDTO(String message) {
         this.message = message;
-        this.field = field;
     }
 }

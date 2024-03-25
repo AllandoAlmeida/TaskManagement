@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
 
         e.getBindingResult().getFieldErrors().forEach(err -> {
             String message = messageSource.getMessage(err, LocaleContextHolder.getLocale());
-            ErrorMessegeDTO error = new ErrorMessegeDTO(message, err.getField());
+            ErrorMessegeDTO error = new ErrorMessegeDTO(message);
             dto.add(error);
         });
 
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<?> handlerNotFoundException(NotFoundException e) {
-        ErrorMessegeDTO error = new ErrorMessegeDTO("Task not found.", "taskId");
+        ErrorMessegeDTO error = new ErrorMessegeDTO("Task not found.");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 

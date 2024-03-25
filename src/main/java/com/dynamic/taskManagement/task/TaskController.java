@@ -1,4 +1,4 @@
-package com.dynamic.taskManagement;
+package com.dynamic.taskManagement.task;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dynamic.taskManagement.exceptions.dtos.TaskCreateDTO;
+import com.dynamic.taskManagement.task.dtos.TaskCreateDTO;
 
 import jakarta.validation.Valid;
 
@@ -39,7 +39,7 @@ public class TaskController {
 
     @GetMapping("/{taskId}")
     public ResponseEntity<Optional<TaskEntity>> getTaskById(@PathVariable UUID taskId) {
-        var taskById = taskService.getTaskById(taskId);
+        var taskById = taskService.getTaskById(taskId);        
         return ResponseEntity.status(HttpStatus.OK).body(taskById);
     }
     

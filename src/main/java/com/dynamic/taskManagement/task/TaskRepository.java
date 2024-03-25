@@ -1,4 +1,4 @@
-package com.dynamic.taskManagement;
+package com.dynamic.taskManagement.task;
 
 import java.util.UUID;
 import java.util.List;
