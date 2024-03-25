@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,22 +27,25 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity<TaskEntity> create(@Valid @RequestBody TaskCreateDTO payload) {
-        TaskEntity createdTask = taskService.createTask(payload);
-        return ResponseEntity.ok(createdTask);
+        var task = taskService.createTask(payload);
+        return ResponseEntity.status(HttpStatus.CREATED).body(task);
     }
 
     @GetMapping
-    public List<TaskEntity> listTasks(@RequestParam Optional<String> status) {
-        return taskService.listTasks(status);
+    public ResponseEntity<List<TaskEntity>> listTasks(@RequestParam Optional<String> status) {
+        var taskStatus = taskService.listTasks(status);
+        return ResponseEntity.status(HttpStatus.OK).body(taskStatus);
     }
 
     @GetMapping("/{taskId}")
-    public Optional<TaskEntity> getTaskById(@PathVariable UUID taskId) {
-        return taskService.getTaskById(taskId);
+    public ResponseEntity<Optional<TaskEntity>> getTaskById(@PathVariable UUID taskId) {
+        var taskById = taskService.getTaskById(taskId);
+        return ResponseEntity.status(HttpStatus.OK).body(taskById);
     }
-
+    
     @DeleteMapping("/{taskId}")
-    public void deleteTask(@PathVariable UUID taskId) {
+    public ResponseEntity<Void> deleteTask(@PathVariable UUID taskId) {
         taskService.deleteTask(taskId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
